@@ -113,11 +113,11 @@ It should work with prior versions; please report your usage and submit pull req
 
 Source
 ----
-The latest source code can always be found here: ``github.com/jaddison/django-simple-templates <http://github.com/jaddison/django-simple-templates/>``_
+The latest source code can always be found here: http://github.com/jaddison/django-simple-templates/
 
 Credits
 ----
-django-simple-templates is maintained by ``James Addison <mailto:code@scottisheyes.com>``_.
+django-simple-templates is maintained by James Addison, code@scottisheyes.com.
 
 License
 ----
@@ -125,10 +125,11 @@ django-simple-templates is Copyright (c) 2013, James Addison. It is free softwar
 
 Questions, Comments, Concerns:
 ----
-Feel free to open an issue here: ``github.com/jaddison/django-simple-templates/issues <http://github.com/jaddison/django-simple-templates/issues/>``_ - or better yet, submit a pull request with fixes and improvements.
+Feel free to open an issue here: http://github.com/jaddison/django-simple-templates/issues/ - or better yet, submit a pull request with fixes and improvements.
 
 TODO:
 ----
 - mention GACE usage (GACE script on original template file only)
 - use canonical link tag to non-variation URL (use django-spurl for easy usage)
-- build the above into your overall project base.html template(s) so you never forget!
+- build the above into your overall project base.html template(s) so you never forget
+- complete tests
