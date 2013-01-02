@@ -45,13 +45,13 @@ Configuration Options
 ----
 **django-simple-templates** has a few options to help cater to your project's needs.  You can override these by setting them in your settings.py.  Each has an acceptable default value, so you do not *need* to set them:
 
-- **SIMPLE\_TEMPLATES\_AB\_PARAM**: optional; defaults to ``ab``.  This is the query string (request.GET) parameter that contains the name of the A/B testing template name.
-- **SIMPLE\_TEMPLATES\_AB\_DIR**: optional; defaults to ``ab_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your A/B testing page templates.
-- **SIMPLE\_TEMPLATES\_DIR**: optional; defaults to ``simple_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your simple page templates.
+- **SIMPLE_TEMPLATES_AB_PARAM**: optional; defaults to ``ab``.  This is the query string (request.GET) parameter that contains the name of the A/B testing template name.
+- **SIMPLE_TEMPLATES_AB_DIR**: optional; defaults to ``ab_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your A/B testing page templates.
+- **SIMPLE_TEMPLATES_DIR**: optional; defaults to ``simple_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your simple page templates.
 
 Usage
 ----
-To create a "simple template" page, all you need to do is create a template file under **SIMPLE\_TEMPLATES\_DIR**.  This is your standard Django template format, inheritance, etc.  The directory structure you place it in determines the URL structure.  For example, creating a template here:
+To create a "simple template" page, all you need to do is create a template file under ``SIMPLE_TEMPLATES_DIR``.  This is your standard Django template format, inheritance, etc.  The directory structure you place it in determines the URL structure.  For example, creating a template here:
 
     <your_templates_dir>/simple_templates/en/contact.html
 
@@ -61,17 +61,13 @@ would result in the a URL structure like:
 
 The ``SimplePageFallbackMiddleware`` middleware kicks in and looks for possible template file matches when an ``Http404`` is the response to a web request, so if you had a URL pattern and view that handled the ``/en/contact/`` URL, this middleware would not do anything at all.
 
-::
-
-To create an A/B testing template (the variation template) for the example simple page template above, you'd create the variation template under the appropriate directory structure under **SIMPLE\_TEMPLATES\_AB\_DIR**:
+To create an A/B testing template (the variation template) for the example simple page template above, you'd create the variation template under the appropriate directory structure under ``SIMPLE_TEMPLATES_AB_DIR``:
 
     <your_templates_dir>/ab_templates/simple_templates/en/contact/variation1.html
 
 and the resulting URL would be:
 
     http://www.example.com/en/contact/?ab=variation1
-
-::
 
 To use the A/B testing functionality in your existing code, import ``get_ab_template`` and use it in your view:
 
@@ -86,7 +82,7 @@ The ``get_ab_template`` function works like this:
 
 - pass Django's `request` object and the view's normal template into `get_ab_template`
 - the `get_ab_template` will look in request.GET to see if there was an `ab` parameter in the query string
-- if `ab` is found in request.GET, `get_ab_template` will attempt to find the associated template file under **SIMPLE\_TEMPLATES\_AB\_DIR**
+- if `ab` is found in request.GET, `get_ab_template` will attempt to find the associated template file under ``SIMPLE_TEMPLATES_AB_DIR``
 - if the `ab` template file is found, the `ab` template path is returned
 - if either `ab` or the template file associated with `ab` is not found, the passed-in 'default' template file is returned
 
@@ -119,16 +115,13 @@ Source
 ----
 The latest source code can always be found here: ``github.com/jaddison/django-simple-templates <http://github.com/jaddison/django-simple-templates/>``_
 
-
 Credits
 ----
 django-simple-templates is maintained by ``James Addison <mailto:code@scottisheyes.com>``_.
 
-
 License
 ----
 django-simple-templates is Copyright (c) 2013, James Addison. It is free software, and may be redistributed under the terms specified in the LICENSE file.
-
 
 Questions, Comments, Concerns:
 ----
