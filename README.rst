@@ -1,18 +1,22 @@
-# django-simple-templates
+django-simple-templates
+====
 
-## Overview
+Overview
+----
 In short, **django-simple-templates** provides easy, designer-friendly templates and A/B testing (split testing) friendly tools for Django.
 
 If you have used or heard of Django's ``flatpages`` app before, you'll be more able to appreciate what **django-simple-templates** gives you.  It is inspired by ``flatpages``, with a desire to have fewer knowledge dependencies and greater flexibility.
 
-## Objectives
+Objectives
+----
 **django-simple-templates** is intended to:
 
 - provide the means to **isolate template designer effort**; reduce web developer involvement
 - provide an easy way to **launch flat or simple pages quickly**; no URL pattern or view needed
 - provide a quick and simple method to do **A/B testing (split testing) with Django templates**
 
-## Use Cases
+Use Cases
+----
 If you need to quickly launch landing pages for marketing campaigns, then **django-simple-templates** is for you.
 
 If you have a great web designer who knows next to nothing about Django, then **django-simple-templates** is likely a good fit.  It helps to reduce the need for:
@@ -22,7 +26,8 @@ If you have a great web designer who knows next to nothing about Django, then **
 
 If you want to be able to **A/B test any Django template** with an external service such as GACE (Google Analytics Content Experiments), then **django-simple-templates** will absolutely help you.  I've always found A/B testing with Django (and frameworks in general) to be somewhat painful - hopefully this app alleviates that pain for others too.
 
-## Installation
+Installation
+----
 It's a standard PyPi install:
 
     pip install django-simple-templates
@@ -36,22 +41,44 @@ To use the simple page template functionality, add the ``SimplePageFallbackMiddl
 
 Note that this middleware is not necessary if you only want to use the ``get_ab_template`` functionality (see below).
 
-## Configuration Options
+Configuration Options
+----
 **django-simple-templates** has a few options to help cater to your project's needs.  You can override these by setting them in your settings.py.  Each has an acceptable default value, so you do not *need* to set them:
 
 - **SIMPLE\_TEMPLATES\_AB\_PARAM**: optional; defaults to ``ab``.  This is the query string (request.GET) parameter that contains the name of the A/B testing template name.
-- **SIMPLE\_TEMPLATES\_AB\_DIR**: optional; defaults to ``ab``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your A/B testing page templates.
+- **SIMPLE\_TEMPLATES\_AB\_DIR**: optional; defaults to ``ab_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your A/B testing page templates.
 - **SIMPLE\_TEMPLATES\_DIR**: optional; defaults to ``simple_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your simple page templates.
 
-## Usage
-To use the A/B testing functionality in your existing code, import the ``get_ab_template`` and use it in your view:
+Usage
+----
+To create a "simple template" page, all you need to do is create a template file under **SIMPLE\_TEMPLATES\_DIR**.  This is your standard Django template format, inheritance, etc.  The directory structure you place it in determines the URL structure.  For example, creating a template here:
+
+    <your_templates_dir>/simple_templates/en/contact.html
+
+would result in the a URL structure like:
+
+    http://www.example.com/en/contact/
+
+The ``SimplePageFallbackMiddleware`` middleware kicks in and looks for possible template file matches when an ``Http404`` is the response to a web request, so if you had a URL pattern and view that handled the ``/en/contact/`` URL, this middleware would not do anything at all.
+
+::
+
+To create an A/B testing template (the variation template) for the example simple page template above, you'd create the variation template under the appropriate directory structure under **SIMPLE\_TEMPLATES\_AB\_DIR**:
+
+    <your_templates_dir>/ab_templates/simple_templates/en/contact/variation1.html
+
+and the resulting URL would be:
+
+    http://www.example.com/en/contact/?ab=variation1
+
+::
+
+To use the A/B testing functionality in your existing code, import ``get_ab_template`` and use it in your view:
 
     from django.shortcuts import render
     from simple_templates.utils import get_ab_template
 
     def my_view(request):
-        # `template` will end up with 'my_view_template.html' if 
-        # the `ab` request.GET parameter is not found
         template = get_ab_template(request, 'my_view_template.html')
         return render(request, template)
        
@@ -59,11 +86,35 @@ The ``get_ab_template`` function works like this:
 
 - pass Django's `request` object and the view's normal template into `get_ab_template`
 - the `get_ab_template` will look in request.GET to see if there was an `ab` parameter in the query string
-- if `ab` is found in request.GET, `get_ab_template` will attempt to find the associated template file
+- if `ab` is found in request.GET, `get_ab_template` will attempt to find the associated template file under **SIMPLE\_TEMPLATES\_AB\_DIR**
 - if the `ab` template file is found, the `ab` template path is returned
 - if either `ab` or the template file associated with `ab` is not found, the passed-in 'default' template file is returned
 
-## Compatibility
+Here's an example to demonstrate.  If you want to A/B test your signup page with the URL:
+
+    http://www.example.com/user/signup/
+
+and your current user signup template file located here:
+
+    <your_templates_dir>/user/signup.html
+
+with a variation called 'fewer-inputs', you would first modify your Django view for a user signing up to use ``get_ab_template`` and you would have this URL as your variation page:
+
+    http://www.example.com/user/signup/?ab=fewer-inputs
+
+and your variation template file should be placed here:
+
+    <your_templates_dir>/ab_templates/user/signup/fewer-inputs.html
+    
+TODO:
+
+- mention GACE usage (GACE script on original template file only)
+- use canonical link tag to non-variation URL (use django-spurl for easy usage)
+- build the above into your overall project base.html template(s) so you never forget!
+
+
+Compatibility
+----
 **django-simple-templates** been used in the following version configurations:
 
 - Python 2.6, 2.7
@@ -71,17 +122,21 @@ The ``get_ab_template`` function works like this:
 
 It should work with prior versions; please report your usage and submit pull requests as necessary.
 
-## Source
+Source
+----
 The latest source code can always be found here: ``github.com/jaddison/django-simple-templates <http://github.com/jaddison/django-simple-templates/>``_
 
 
-## Credits
+Credits
+----
 django-simple-templates is maintained by ``James Addison <mailto:code@scottisheyes.com>``_.
 
 
-## License
+License
+----
 django-simple-templates is Copyright (c) 2013, James Addison. It is free software, and may be redistributed under the terms specified in the LICENSE file.
 
 
-## Questions, Comments, Concerns:
+Questions, Comments, Concerns:
+----
 Feel free to open an issue here: ``github.com/jaddison/django-simple-templates/issues <http://github.com/jaddison/django-simple-templates/issues/>``_ - or better yet, submit a pull request with fixes and improvements.
