@@ -13,7 +13,7 @@ setup(
     author='James Addison',
     author_email='code@scottisheyes.com',
     packages = ['simple_templates'],
-    version = '0.5',
+    version = '0.5.1',
     url='http://github.com/jaddison/django-simple-templates',
     keywords=['a/b testing', 'split testing', 'a/b', 'split'],
     license='BSD',
