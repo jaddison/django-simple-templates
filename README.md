@@ -135,3 +135,4 @@ TODO:
 - use canonical link tag to non-variation URL (use django-spurl for easy usage)
 - build the above into your overall project base.html template(s) so you never forget
 - complete tests
+- mention `_homepage_` special template case
