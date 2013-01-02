@@ -106,13 +106,6 @@ and your variation template file should be placed here:
 
     <your_templates_dir>/ab_templates/user/signup/fewer-inputs.html
     
-TODO:
-
-- mention GACE usage (GACE script on original template file only)
-- use canonical link tag to non-variation URL (use django-spurl for easy usage)
-- build the above into your overall project base.html template(s) so you never forget!
-
-
 Compatibility
 ----
 **django-simple-templates** been used in the following version configurations:
@@ -140,3 +133,9 @@ django-simple-templates is Copyright (c) 2013, James Addison. It is free softwar
 Questions, Comments, Concerns:
 ----
 Feel free to open an issue here: ``github.com/jaddison/django-simple-templates/issues <http://github.com/jaddison/django-simple-templates/issues/>``_ - or better yet, submit a pull request with fixes and improvements.
+
+TODO:
+----
+- mention GACE usage (GACE script on original template file only)
+- use canonical link tag to non-variation URL (use django-spurl for easy usage)
+- build the above into your overall project base.html template(s) so you never forget!
