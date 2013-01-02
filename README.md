@@ -3,9 +3,11 @@ django-simple-templates
 
 Overview
 ----
-In short, **django-simple-templates** provides easy, designer-friendly templates and A/B testing (split testing) friendly tools for Django.
+In short, **django-simple-templates** provides easy, designer-friendly templates and A/B testing (split testing) friendly tools for Django.  I ran into both of these problems while working on www.chatterblock.com (which you should check it out).
 
 If you have used or heard of Django's ``flatpages`` app before, you'll be more able to appreciate what **django-simple-templates** gives you.  It is inspired by ``flatpages``, with a desire to have fewer knowledge dependencies and greater flexibility.
+
+Note that this is a work in progress - please provide feedback!
 
 Objectives
 ----
