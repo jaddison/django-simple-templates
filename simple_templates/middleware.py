@@ -15,7 +15,6 @@ class SimplePageFallbackMiddleware(object):
 
         # set up the location where this template should reside
         template = "{0}/{1}.html".format(SIMPLE_TEMPLATES_DIR, request.path.strip('/') or '_homepage_')
-        print template
 
         # if it doesn't exist, continue with the 404 response
         if not find_template(template):

@@ -26,11 +26,9 @@ def get_ab_template(request, default=None):
      - the SIMPLE_TEMPLATES_AB_PARAM value from request.GET
     """
     template_name = request.GET.get('ab')
-    print template_name
     if template_name:
         if default:
             (filepath, extension) = os.path.splitext(default)
             template_name = os.path.join(SIMPLE_TEMPLATES_AB_DIR, filepath, template_name + extension or '')
-            print template_name
         return find_template(template_name) or default
     return default
