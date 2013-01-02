@@ -9,7 +9,7 @@ def read(fname):
 setup(
     name = 'django-simple-templates',
     description = 'Easy, designer-friendly templates and A/B testing friendly tools for Django.',
-    long_description=read('README.rst'),
+    long_description=read('README.md'),
     author='James Addison',
     author_email='code@scottisheyes.com',
     packages = ['simple_templates'],
