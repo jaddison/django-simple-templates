@@ -1,0 +1,10 @@
+*.pyc
+.Python
+.DS_Store
+.idea
+build
+lib
+include
+src
+bin
+share
