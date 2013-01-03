@@ -103,7 +103,22 @@ with a variation called 'fewer-inputs', you would first modify your Django view 
 and your variation template file should be placed here:
 
     <your_templates_dir>/ab_templates/user/signup/fewer-inputs.html
-    
+
+Testing
+----
+To run the **django-simple-templates** tests, follow these steps:
+
+- clone the **django-simple-templates** repository
+- change directory into the repository
+- initialize a 'virtualenv': ``virtualenv --distribute .``
+- activate the virtualenv: ``source bin/activate``
+- install the dependencies for testing **django-simple-templates**: ``pip install -r test_project/test-requirements.txt``
+- run the tests: ``python test_project/manage.py test simple_templates``
+
+Tests have been run under:
+- Python 2.7.3 and Django 1.4.3
+- (please report other results)
+
 Compatibility
 ----
 **django-simple-templates** been used in the following version configurations:
@@ -134,5 +149,4 @@ TODO:
 - mention GACE usage (GACE script on original template file only)
 - use canonical link tag to non-variation URL (use django-spurl for easy usage)
 - build the above into your overall project base.html template(s) so you never forget
-- complete tests
 - mention `_homepage_` special template case
