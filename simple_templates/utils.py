@@ -25,7 +25,7 @@ def get_ab_template(request, default=None):
      - the path to the `default` template and
      - the SIMPLE_TEMPLATES_AB_PARAM value from request.GET
     """
-    template_name = request.GET.get('ab')
+    template_name = request.GET.get(SIMPLE_TEMPLATES_AB_PARAM)
     if template_name:
         if default:
             (filepath, extension) = os.path.splitext(default)
