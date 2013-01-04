@@ -1,5 +1,4 @@
-django-simple-templates
-====
+**Build status:** https://api.travis-ci.org/jaddison/django-simple-templates.png
 
 Overview
 ----
