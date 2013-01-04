@@ -1,4 +1,4 @@
-**Build status:** https://api.travis-ci.org/jaddison/django-simple-templates.png
+**Build Status:** [![Build Status](https://api.travis-ci.org/jaddison/django-simple-templates.png)](https://travis-ci.org/jaddison/django-simple-templates])
 
 Overview
 ----
