@@ -1,1 +1,1 @@
-django
+https://www.djangoproject.com/download/1.5b2/tarball/
