@@ -131,6 +131,66 @@ and your variation template file should be placed here:
     <your_templates_dir>/ab_templates/profiles/user/signup/fewer-inputs.html
 
 
+Tips for Optimising your Implementation
+----
+
+### SEO Considerations
+Speaking plainly, you need to watch that you don't create duplicate content in the eyes of search engines. What's duplicate content? Two pages that are (almost) identical.  When you're doing A/B testing, you're frequently doing minor variations on a theme - perhaps only the colour of a single button.
+
+**Canonical link elements** to the rescue. These are simply an HTML element you place in your ``<head>`` section of your variation template pages, like so:
+
+    <html>
+    <head>
+        <title>My variation webpage</title>
+        <link rel="canonical" href="<< whatever your original page URL is >>">
+    </head>
+    <body>
+        ...
+    </body>
+    </html>
+    
+The link represented by ``<< whatever your original page URL is >>`` in the above example should point to the 'canonical' page URL (without the 'ab=variation-name' parameter); meaning the original page URL that you want indexed by search engines.  This way, any search engine that sees a variation template page will 'ignore' it because you're telling it to see it the same as the original page.  But you can make this a lot easier on yourself, by using the excellent [django-spurl](https://github.com/j4mie/django-spurl "django-spurl")  app, and making it this change in your base.html, like so:
+
+    <html>
+    <head>
+        <title>base.html template</title>
+        <link rel="canonical" href="{% block head-canonical %}{% spurl base=request.get_full_path remove_query_param='ab' %}{% endblock %}">
+    </head>
+    <body>
+        ...
+    </body>
+    </html>
+
+and then extend **all** of your templates (normal view templates, simple templates and A/B templates) from this base.html.  The ``spurl`` template tag simply removes the ``ab`` parameter to create the canonical link for you on **every single page** on your site, making split testing easy, one less thing to think about. Note that you'll need to add the ``django.core.context_processors.request`` to your ``TEMPLATE_CONTEXT_PROCESSORS`` in ``settings.py`` and install [django-spurl](https://github.com/j4mie/django-spurl "django-spurl") for this to work.
+
+### Google Analytics Content Experiments Integration (GACE)
+Based on the example above, easy integration for GACE follows a similar strategy - have a ``<head>`` block in your base.html where you can override to place the GACE Javascript snippet, like so:
+
+    <html>
+    <head>
+        {% block head-gace-js %}{% endblock %}
+        <title>base.html template</title>
+        <link rel="canonical" href="{% block head-canonical %}{% spurl base=request.get_full_path remove_query_param='ab' %}{% endblock %}">
+    </head>
+    <body>
+        ...
+    </body>
+    </html>
+
+Then, in any 'original' page that you want to do an A/B test on, you'd override the ``head-gace-js`` block to paste in the GACE JS snippet:
+
+    {% extends 'base.html' %}
+    
+    {# You would only do this in the original template, not the variation templates! See GACE help for more details. #}
+    {% block head-gace-js %}
+    ... GACE JS code snippet here
+    {% endblock %}
+
+    ... original page's block overrides for content, etc.
+
+I've done a limited amount of testing on the GACE integration, so please report your results!
+
+
 Running Unit Tests
 ----
 To run the **django-simple-templates** tests, follow these steps:
@@ -175,10 +235,3 @@ django-simple-templates is Copyright (c) 2013, James Addison. It is free softwar
 Questions, Comments, Concerns:
 ----
 Feel free to open an issue here: http://github.com/jaddison/django-simple-templates/issues/ - or better yet, submit a pull request with fixes and improvements.
-
-
-TODO:
-----
-- mention GACE usage (GACE script on original template file only)
-- use canonical link tag to non-variation URL (use django-spurl for easy usage)
-- build the above into your overall project base.html template(s) so you never forget
