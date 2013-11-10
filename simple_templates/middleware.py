@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render, redirect
 
 from .utils import get_ab_template, find_template
@@ -28,5 +29,9 @@ class SimplePageFallbackMiddleware(object):
                 url += u'?' + qs
             return redirect(url, permanent=True)
 
-        # check for the presence of an a/b test template page
-        return render(request, get_ab_template(request, template))
+        @requires_csrf_token
+        def protect_render(request):
+            # check for the presence of an a/b test template page
+            return render(request, get_ab_template(request, template))
+
+        return protect_render(request)
