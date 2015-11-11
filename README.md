@@ -212,7 +212,7 @@ Compatibility
 **django-simple-templates** been used in the following version configurations:
 
 - Python 2.6, 2.7
-- Django 1.4, 1.5
+- Django 1.4, 1.5, 1.6, 1.7, 1.9
 
 It should work with prior versions; please report your usage and submit pull requests as necessary.
 

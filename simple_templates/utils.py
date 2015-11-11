@@ -1,6 +1,13 @@
 import os
 
 from django.template import loader, TemplateDoesNotExist
+try:
+    # Django < 1.8
+    from django.template.loader import find_template as django_find_template
+except ImportError:
+    # Django >= 1.8
+    from django.template.loader import get_template as django_find_template
+
 from django.conf import settings
 
 
@@ -10,7 +17,7 @@ SIMPLE_TEMPLATES_AB_DIR = getattr(settings, 'SIMPLE_TEMPLATES_AB_DIR', 'ab_templ
 
 def find_template(template):
     try:
-        loader.find_template(template)
+        django_find_template(template)
         return template
     except TemplateDoesNotExist:
         return None
