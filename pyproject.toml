@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "simple_templates.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["simple_templates*"]
+exclude = ["simple_templates.tests*"]
+
+[project]
+dynamic = ["version"]
+name = "django-simple-templates"
+readme = "README.md"
+authors = [
+    { name = "James Addison", email = "addi00@gmail.com" },
+]
+maintainers = [
+    { name = "James Addison", email = "addi00@gmail.com" },
+]
+description = "Easy, designer-friendly templates and A/B testing friendly tools for Django."
+keywords = ['a/b testing', 'split testing', 'a/b', 'split']
+license = { "text" = "MIT" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Environment :: Web Environment",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Framework :: Django",
+    "Topic :: Internet :: WWW/HTTP :: WSGI",
+]
+requires-python = ">=3.8"
+dependencies = [
+  "django>=4.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/jaddison/django-simple-templates"
+Documentation = "https://github.com/jaddison/django-simple-templates"
+Issues = "https://github.com/jaddison/django-simple-templates/issues"

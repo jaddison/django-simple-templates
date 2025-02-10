@@ -1,14 +1,6 @@
-**Build Status:** [![Build Status](https://api.travis-ci.org/jaddison/django-simple-templates.png)](https://travis-ci.org/jaddison/django-simple-templates])
-
-
 Overview
 ----
-In short, **django-simple-templates** provides easy, designer-friendly templates and A/B testing (split testing) friendly tools for Django.  I ran into both of these problems while working on www.chatterblock.com (which you should check it out).
-
-If you have used or heard of Django's ``flatpages`` app before, you'll be more able to appreciate what **django-simple-templates** gives you.  It is inspired by ``flatpages``, with a desire to have fewer knowledge dependencies and greater flexibility.
-
-Note that this is a work in progress - please provide feedback!
-
+**django-simple-templates** provides easy, designer-friendly templates and A/B testing (split testing) friendly tools for Django. If you have used Django's ``flatpages`` app, you'll be able to appreciate what **django-simple-templates** gives you.
 
 Objectives
 ----
@@ -16,19 +8,17 @@ Objectives
 
 - provide the means to **isolate template designer effort**; reduce web developer involvement
 - provide an easy way to **launch flat or simple pages quickly**; no URL pattern or view needed
-- provide a quick and simple method to do **A/B testing (split testing) with Django templates**
+- provide a quick and simple method to **test page variations with Django templates**
 
 
 Use Cases
 ----
-If you need to quickly launch landing pages for marketing campaigns, then **django-simple-templates** is for you.
-
-If you have a great web designer who knows next to nothing about Django, then **django-simple-templates** is likely a good fit.  It helps to reduce the need for:
+If you need to quickly launch landing pages for marketing campaigns, then **django-simple-templates** is for you. If you have a great web designer who knows next to nothing about Django, then **django-simple-templates** is a good fit.  It helps to reduce the need for:
 
 - training web designers on Django URL patterns, views, etc. - you can restrict the necessary knowledge to Django templates and template tags (custom and/or builtin)
 - involving web developers to create stub page templates or to convert designer-created static HTML pages to Django templates
 
-If you want to be able to **A/B test any Django template** with an external service such as GACE (Google Analytics Content Experiments), then **django-simple-templates** will absolutely help you.  I've always found A/B testing with Django (and frameworks in general) to be somewhat painful - hopefully this app alleviates that pain for others too.
+If you want to be able to **A/B test any Django template**, then **django-simple-templates** will absolutely help you.  I've always found A/B testing with Django (and frameworks in general) to be somewhat painful - hopefully this app alleviates that pain for others too.
 
 
 Installation
@@ -51,9 +41,9 @@ Configuration Options
 ----
 **django-simple-templates** has a few options to help cater to your project's needs.  You can override these by setting them in your settings.py.  Each has an acceptable default value, so you do not *need* to set them:
 
-- **SIMPLE_TEMPLATES_AB_PARAM**: optional; defaults to ``ab``.  This is the query string (request.GET) parameter that contains the name of the A/B testing template name.
-- **SIMPLE_TEMPLATES_AB_DIR**: optional; defaults to ``ab_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your A/B testing page templates.
-- **SIMPLE_TEMPLATES_DIR**: optional; defaults to ``simple_templates``.  This is the subdirectory inside your TEMPLATE_DIRS where you should place your simple page templates.
+- `SIMPLE_TEMPLATES_AB_PARAM`: optional; defaults to `"ab"`.  This is the query string (`request.GET`) parameter that contains the name of the A/B testing template name.
+- `SIMPLE_TEMPLATES_AB_DIR`: optional; defaults to `"ab_templates`".  This is the subdirectory inside your template directory where you should place your A/B testing page templates.
+- `SIMPLE_TEMPLATES_DIR`: optional; defaults to `"simple_templates`".  This is the subdirectory inside your template directory where you should place your simple page templates.
 
 
 Usage
@@ -135,70 +125,35 @@ Tips for Optimising your Implementation
 ----
 
 ### SEO Considerations
-Speaking plainly, you need to watch that you don't create duplicate content in the eyes of search engines. What's duplicate content? Two pages that are (almost) identical.  When you're doing A/B testing, you're frequently doing minor variations on a theme - perhaps only the colour of a single button.
+You need to ensure you don't create duplicate content for search engines. What's duplicate content? Two pages that are (almost) identical.  When you're doing A/B testing, you're frequently doing minor variations on a theme - perhaps only the colour of a single button.
 
-**Canonical link elements** to the rescue. These are simply an HTML element you place in your ``<head>`` section of your variation template pages, like so:
+**Canonical link elements** to the rescue. The link should point to the 'canonical' page URL (without the `'ab=variation-name'` parameter). This would be the original page URL that you want indexed by search engines.  This way, any search engine that sees a variation template page will 'ignore' it because you're telling it to see it the same as the original page.  
 
-    <html>
-    <head>
-        <title>My variation webpage</title>
-        <link rel="canonical" href="<< whatever your original page URL is >>">
-    </head>
-    <body>
-        ...
-    </body>
-    </html>
-    
-The link represented by ``<< whatever your original page URL is >>`` in the above example should point to the 'canonical' page URL (without the 'ab=variation-name' parameter); meaning the original page URL that you want indexed by search engines.  This way, any search engine that sees a variation template page will 'ignore' it because you're telling it to see it the same as the original page.  But you can make this a lot easier on yourself, by using the excellent [django-spurl](https://github.com/j4mie/django-spurl "django-spurl")  app, and making it this change in your base.html, like so:
+But you can make this easier by using the included `remove_query_param` template filter in your base.html, like so:
 
     <html>
     <head>
         <title>base.html template</title>
-        <link rel="canonical" href="{% block head-canonical %}{% spurl base=request.get_full_path remove_query_param='ab' %}{% endblock %}">
+        <link rel="canonical" href="{{ request.get_full_path|remove_query_param:'ab' }}" />
     </head>
     <body>
         ...
     </body>
     </html>
 
-and then extend **all** of your templates (normal view templates, simple templates and A/B templates) from this base.html.  The ``spurl`` template tag simply removes the ``ab`` parameter to create the canonical link for you on **every single page** on your site, making split testing easy, one less thing to think about. Note that you'll need to add the ``django.core.context_processors.request`` to your ``TEMPLATE_CONTEXT_PROCESSORS`` in ``settings.py`` and install [django-spurl](https://github.com/j4mie/django-spurl "django-spurl") for this to work.
+Extend **all** of your templates (normal view templates, simple templates, and A/B templates) from this `base.html`.  Here, the ``remove_query_param`` template filter removes the ``ab`` parameter to create the canonical link for you on **every single page** on your site, making split testing easy, one less thing to think about. 
 
-### Google Analytics Content Experiments Integration (GACE)
-Based on the example above, easy integration for GACE follows a similar strategy - have a ``<head>`` block in your base.html where you can override to place the GACE Javascript snippet, like so:
-
-    <html>
-    <head>
-        {% block head-gace-js %}{% endblock %}
-        <title>base.html template</title>
-        <link rel="canonical" href="{% block head-canonical %}{% spurl base=request.get_full_path remove_query_param='ab' %}{% endblock %}">
-    </head>
-    <body>
-        ...
-    </body>
-    </html>
-
-Then, in any 'original' page that you want to do an A/B test on, you'd override the ``head-gace-js`` block to paste in the GACE JS snippet:
-
-    {% extends 'base.html' %}
-    
-    {# You would only do this in the original template, not the variation templates! See GACE help for more details. #}
-    {% block head-gace-js %}
-    ... GACE JS code snippet here
-    {% endblock %}
-
-    ... original page's block overrides for content, etc.
-
-I've done a limited amount of testing on the GACE integration, so please report your results!
+Note that in your ``settings.py`` you'll need to update the `TEMPLATES` setting to add ``"django.core.context_processors.request"`` to the [`context_processors` option](https://docs.djangoproject.com/en/4.2/topics/templates/#django.template.backends.django.DjangoTemplates).
 
 
-Running Unit Tests
+Tests
 ----
 To run the **django-simple-templates** tests, follow these steps:
 
 - clone the **django-simple-templates** repository
 - change directory into the repository
-- initialize a 'virtualenv': ``virtualenv --distribute .``
-- activate the virtualenv: ``source bin/activate``
+- initialize a 'virtualenv': ``python -m venv venv``
+- activate the virtualenv: ``source venv/bin/activate``
 - install the dependencies for testing **django-simple-templates**: ``pip install -r test_project/test-requirements.txt``
 - run the tests: ``python test_project/manage.py test simple_templates``
 
@@ -211,26 +166,8 @@ Compatibility
 ----
 **django-simple-templates** been used in the following version configurations:
 
-- Python 2.6, 2.7
-- Django 1.4, 1.5, 1.6, 1.7, 1.9
-
-It should work with prior versions; please report your usage and submit pull requests as necessary.
-
-
-Source
-----
-The latest source code can always be found here: http://github.com/jaddison/django-simple-templates/
-
-
-Credits
-----
-django-simple-templates is maintained by James Addison, code@scottisheyes.com.
-
-
-License
-----
-django-simple-templates is Copyright (c) 2013, James Addison. It is free software, and may be redistributed under the terms specified in the LICENSE file.
-
+- Python 3.8+
+- Django 4.2+
 
 Questions, Comments, Concerns:
 ----
