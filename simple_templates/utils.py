@@ -1,12 +1,7 @@
 import os
 
 from django.template import loader, TemplateDoesNotExist
-try:
-    # Django < 1.8
-    from django.template.loader import find_template as django_find_template
-except ImportError:
-    # Django >= 1.8
-    from django.template.loader import get_template as django_find_template
+from django.template.loader import get_template as django_find_template
 
 from django.conf import settings
 
