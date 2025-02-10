@@ -1,0 +1,12 @@
+{% load simple_templates %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="canonical" href="{{ request.get_full_path|remove_query_param:'ab' }}" />
+</head>
+<body>
+{% block body %}
+page-original
+{% endblock %}
+</body>
+</html>

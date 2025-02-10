@@ -209,3 +209,16 @@ class ChangeABParamTest(TestCase):
         response = self.client.get(template)
         self.assertEqual(type(response), HttpResponse)
         self.assertContains(response, 'ab_templates-page-variation1')
+
+
+class CanonicalURLTest(TestCase):
+    def setUp(self):
+        reload(middleware)
+        reload(utils)
+
+    def test_canonical(self):
+        response = self.client.get('/canonical/?ab=variation1')
+        self.assertEqual(type(response), HttpResponse)
+        self.assertContains(response, 'page-canonical-variation1')
+        self.assertNotContains(response, '<link rel="canonical" href="/canonical/?ab=variation1" />')
+        self.assertContains(response, '<link rel="canonical" href="/canonical/" />')
